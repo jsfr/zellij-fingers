@@ -1,0 +1,17 @@
+[package]
+name = "zellij-fingers"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jens Fredskov"]
+description = "Zellij plugin that highlights pattern matches and lets users select them via keyboard hints"
+license = "MIT"
+
+[dependencies]
+zellij-tile = "0.43"
+regex = "1"
+unicode-width = "0.2"
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true
