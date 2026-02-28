@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-zellij-fingers is a **Zellij WASM plugin** written in **Rust** that highlights pattern matches (URLs, file paths, git SHAs, IPs, etc.) in Zellij panes and lets users select them via Huffman-encoded keyboard hints.
+zellij-fingers is a **Zellij WASM plugin** written in **Rust** that highlights pattern matches (URLs, file paths, git SHAs, IPs, etc.) in Zellij panes and lets users select them via Huffman-encoded keyboard hints. It is a rewrite of [tmux-fingers](https://github.com/Morantron/tmux-fingers) (Crystal/tmux) for the Zellij terminal multiplexer.
 
 ## Build & Development
 
@@ -21,7 +21,10 @@ cargo build
 cargo build --release
 
 # Run tests (on host target, not WASM)
-cargo test --target "$(rustc -vV | grep host | awk '{print $2}')"
+just test
+
+# Run clippy lints
+just lint
 
 # Build and install plugin to ~/.config/zellij/plugins/
 just install
@@ -49,7 +52,7 @@ The `.cargo/config.toml` sets the default build target to `wasm32-wasip1`. Tests
 | `src/action.rs` | Execute copy/open/paste via RunCommands |
 | `src/pane_capture.rs` | Capture target pane content via dump-screen |
 | `src/ansi.rs` | Parse tmux-style format strings to ANSI escape codes |
-| `src/state.rs` | PluginPhase enum, Modifier enum |
+| `src/state.rs` | PluginPhase enum |
 
 ## Patterns
 
@@ -57,7 +60,7 @@ Built-in patterns are defined in `src/config.rs` as `builtin_patterns()`. User p
 
 ## Testing
 
-Tests use Rust's built-in `#[cfg(test)]` framework with `#[test]` functions. Tests are inline in each module file.
+Tests use Rust's built-in `#[cfg(test)]` framework with `#[test]` functions. Tests are inline in each module file. Run with `just test`.
 
 ## Version Control
 
