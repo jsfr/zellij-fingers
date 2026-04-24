@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build WASM plugin
+        run: cargo build --release
+
+      - name: Generate checksum
+        working-directory: target/wasm32-wasip1/release
+        run: sha256sum zellij-fingers.wasm > zellij-fingers.wasm.sha256
+
+      - name: Generate release notes
+        id: changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+
+      - name: Update CHANGELOG.md
+        run: |
+          set -euo pipefail
+          marker='<!-- legacy-start -->'
+          if ! grep -qF "$marker" CHANGELOG.md; then
+            echo "Marker '$marker' not found in CHANGELOG.md" >&2
+            exit 1
+          fi
+          tmp=$(mktemp)
+          cat > "$tmp" <<'NEW_ENTRY'
+          ${{ steps.changelog.outputs.content }}
+          NEW_ENTRY
+          awk -v f="$tmp" '
+            $0 ~ /<!-- legacy-start -->/ {
+              while ((getline line < f) > 0) print line
+              close(f)
+              print ""
+            }
+            { print }
+          ' CHANGELOG.md > CHANGELOG.new
+          mv CHANGELOG.new CHANGELOG.md
+          rm -f "$tmp"
+
+      - name: Commit CHANGELOG.md
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git diff --cached --quiet || git commit -m "chore: update changelog for ${{ github.ref_name }}"
+          git push origin HEAD:master
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            target/wasm32-wasip1/release/zellij-fingers.wasm
+            target/wasm32-wasip1/release/zellij-fingers.wasm.sha256
+          body: ${{ steps.changelog.outputs.content }}
