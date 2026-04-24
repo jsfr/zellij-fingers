@@ -23,14 +23,20 @@ cargo build --release
 # Run tests (on host target, not WASM)
 just test
 
-# Run clippy lints
+# Run a single test
+cargo test --target "$(rustc -vV | awk '/host:/ {print $2}')" <test_name>
+
+# Run clippy lints (host target, warnings denied)
 just lint
+
+# Format
+just fmt
 
 # Build and install plugin to ~/.config/zellij/plugins/
 just install
 ```
 
-The `.cargo/config.toml` sets the default build target to `wasm32-wasip1`. Tests must be run with an explicit host target since WASM doesn't support test harnesses. The plugin is built as a binary (`src/main.rs`), not a cdylib — Zellij requires a `_start` export which only binaries provide.
+The `.cargo/config.toml` sets the default build target to `wasm32-wasip1`. `just test`/`just lint` override this with the host target (resolved from `rustc -vV`) because WASM has no test harness. The plugin is built as a binary (`src/main.rs`), not a cdylib — Zellij requires a `_start` export which only binaries provide. `just lint` runs clippy with `-D warnings`, so any warning fails the build.
 
 ## Architecture
 
