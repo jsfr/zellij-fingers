@@ -1,3 +1,17 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+<!-- legacy-start -->
+
+## Legacy tmux-fingers history
+
+Entries below predate the Zellij/Rust port and are preserved from
+[tmux-fingers](https://github.com/Morantron/tmux-fingers).
+
 ## 2.6.2 - 15 Feb 2026
 
 * Fix line jumping and backdrop-style rendering issues related with tabs,
