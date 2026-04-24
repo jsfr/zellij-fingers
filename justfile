@@ -13,3 +13,6 @@ test:
 
 fmt:
     cargo fmt
+
+check-fmt:
+    cargo fmt --check
