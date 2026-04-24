@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0] - 2026-04-24
+
+### CI
+
+- add CI workflow for fmt, clippy, test, and wasm build
+- add release workflow with git-cliff changelog automation
+
+### Fix
+
+- Patterns matching the empty string rejected
+- extended posix regex used in check
+- close stdin before waiting for load-buffer command (#157)
+
+### Fixed
+
+- fix multi-user race
+- typos in README.md
+- better tmux config syntax (#151)
+
+### Readme
+
+- clarify that we use the `gawk` ERE syntax, not `grep -E`
+
+### doc
+
+- update list of builtin patterns
+
+### hinter
+
+- use same hint for all occurrences of match
+
+### indentation
+
+- fix awful mixture of tabs and spaces
+
+### style
+
+- apply rustfmt across codebase
+
+
+
 <!-- legacy-start -->
 
 ## Legacy tmux-fingers history
