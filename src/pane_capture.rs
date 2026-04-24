@@ -9,10 +9,7 @@ const CAPTURE_FILE: &str = "/tmp/zellij-fingers-capture";
 /// already exists when the plugin starts.
 pub fn request_pane_capture() {
     let context = BTreeMap::new();
-    run_command(
-        &["cat", CAPTURE_FILE],
-        context,
-    );
+    run_command(&["cat", CAPTURE_FILE], context);
 }
 
 /// Find the target pane from a PaneManifest: the focused terminal pane

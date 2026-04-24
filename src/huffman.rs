@@ -154,10 +154,7 @@ mod tests {
     #[test]
     fn returns_first_n_when_n_lte_alphabet() {
         let result = generate_hints(&alphabet_a(), 3);
-        let expected: Vec<String> = vec!["a", "s", "d"]
-            .into_iter()
-            .map(String::from)
-            .collect();
+        let expected: Vec<String> = vec!["a", "s", "d"].into_iter().map(String::from).collect();
         assert_eq!(result, expected);
     }
 }

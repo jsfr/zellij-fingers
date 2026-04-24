@@ -58,10 +58,7 @@ fn open_url(config: &Config, text: &str) {
 
 fn run_custom_action(action: &str, text: &str) {
     let escaped = shell_escape(text);
-    let full_cmd = format!(
-        "HINT={} printf '%s' {} | {}",
-        escaped, escaped, action
-    );
+    let full_cmd = format!("HINT={} printf '%s' {} | {}", escaped, escaped, action);
 
     let context = BTreeMap::new();
     run_command(&["sh", "-c", &full_cmd], context);

@@ -138,10 +138,7 @@ pub fn builtin_patterns() -> HashMap<&'static str, String> {
             "url",
             r"((https?://|git@|git://|ssh://|ftp://|file:///)[^\s()\x22']+)".to_string(),
         ),
-        (
-            "path",
-            r"(([.\w\-~\$@]+)?(/[.\w\-@]+)+/?)".to_string(),
-        ),
+        ("path", r"(([.\w\-~\$@]+)?(/[.\w\-@]+)+/?)".to_string()),
         ("hex", r"(0x[0-9a-fA-F]+)".to_string()),
         (
             "kubernetes",
@@ -183,10 +180,7 @@ pub fn builtin_patterns() -> HashMap<&'static str, String> {
             "git-status-branch",
             r"Your branch is up to date with '(?P<match>.*)'\.".to_string(),
         ),
-        (
-            "diff",
-            r"(---|\+\+\+) [ab]/(?P<match>.*)".to_string(),
-        ),
+        ("diff", r"(---|\+\+\+) [ab]/(?P<match>.*)".to_string()),
     ])
 }
 
@@ -248,10 +242,7 @@ mod tests {
         127.0.0.1
         foofofo
       ";
-        assert_eq!(
-            matches_for("ip", input),
-            vec!["192.168.0.1", "127.0.0.1"]
-        );
+        assert_eq!(matches_for("ip", input), vec!["192.168.0.1", "127.0.0.1"]);
     }
 
     #[test]
@@ -287,10 +278,7 @@ mod tests {
       ";
         assert_eq!(
             matches_for("sha", input),
-            vec![
-                "fc4fea27210bc0d85b74f40866e12890e3788134",
-                "fc4fea2"
-            ]
+            vec!["fc4fea27210bc0d85b74f40866e12890e3788134", "fc4fea2"]
         );
     }
 

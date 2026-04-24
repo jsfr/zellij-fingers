@@ -11,10 +11,10 @@ mod state;
 
 use std::collections::BTreeMap;
 
-use zellij_tile::prelude::*;
 use crate::config::Config;
 use crate::hinter::Hinter;
 use crate::state::PluginPhase;
+use zellij_tile::prelude::*;
 
 struct ZellijFingers {
     phase: PluginPhase,
@@ -81,7 +81,8 @@ impl ZellijPlugin for ZellijFingers {
                         Some("100%".to_string()),
                         Some("100%".to_string()),
                         None,
-                    ).unwrap();
+                    )
+                    .unwrap();
                     change_floating_panes_coordinates(vec![(pane_id, coords)]);
 
                     self.phase = PluginPhase::Capturing;
@@ -93,11 +94,11 @@ impl ZellijPlugin for ZellijFingers {
                 match event {
                     Event::PaneUpdate(pane_manifest) => {
                         if self.target_pane_id.is_none() {
-                            self.target_pane_id =
-                                pane_capture::find_target_pane(&pane_manifest);
-                            if let Some((rows, cols)) =
-                                pane_capture::get_pane_dimensions(&pane_manifest, self.target_pane_id)
-                            {
+                            self.target_pane_id = pane_capture::find_target_pane(&pane_manifest);
+                            if let Some((rows, cols)) = pane_capture::get_pane_dimensions(
+                                &pane_manifest,
+                                self.target_pane_id,
+                            ) {
                                 self.pane_rows = rows;
                                 self.pane_cols = cols;
                             }
@@ -108,10 +109,8 @@ impl ZellijPlugin for ZellijFingers {
                     Event::RunCommandResult(exit_code, stdout, _stderr, _context) => {
                         if exit_code == Some(0) {
                             let content = String::from_utf8_lossy(&stdout).to_string();
-                            self.pane_content = content
-                                .lines()
-                                .map(|l| l.trim_end().to_string())
-                                .collect();
+                            self.pane_content =
+                                content.lines().map(|l| l.trim_end().to_string()).collect();
                         }
                         // If we already have pane dimensions, try to start hinting
                         self.try_start_hinting()
@@ -135,13 +134,8 @@ impl ZellijPlugin for ZellijFingers {
         match self.phase {
             PluginPhase::Hinting => {
                 if let Some(ref mut hinter) = self.hinter {
-                    let output = renderer::render(
-                        hinter,
-                        &self.input,
-                        &self.selected_hints,
-                        rows,
-                        cols,
-                    );
+                    let output =
+                        renderer::render(hinter, &self.input, &self.selected_hints, rows, cols);
                     print!("{}", output);
                 }
             }
@@ -164,11 +158,7 @@ impl ZellijFingers {
     /// Try to transition to Hinting once we have both pane content and dimensions.
     fn try_start_hinting(&mut self) -> bool {
         if !self.pane_content.is_empty() && self.pane_cols > 0 {
-            let hinter = Hinter::new(
-                &self.pane_content,
-                self.pane_cols,
-                &self.config,
-            );
+            let hinter = Hinter::new(&self.pane_content, self.pane_cols, &self.config);
             self.hinter = Some(hinter);
             self.phase = PluginPhase::Hinting;
             true

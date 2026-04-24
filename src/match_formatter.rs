@@ -25,7 +25,11 @@ impl MatchFormatter {
         let mut result = String::new();
         result.push_str(RESET);
         result.push_str(&self.before_offset(offset, highlight));
-        result.push_str(&self.format_offset(selected, hint, &self.within_offset(offset, highlight)));
+        result.push_str(&self.format_offset(
+            selected,
+            hint,
+            &self.within_offset(offset, highlight),
+        ));
         result.push_str(&self.after_offset(offset, highlight));
         result.push_str(&self.backdrop_style);
         result
@@ -44,9 +48,7 @@ impl MatchFormatter {
     fn within_offset(&self, offset: Option<(usize, usize)>, highlight: &str) -> String {
         match offset {
             None => highlight.to_string(),
-            Some((start, length)) => {
-                highlight.chars().skip(start).take(length).collect()
-            }
+            Some((start, length)) => highlight.chars().skip(start).take(length).collect(),
         }
     }
 

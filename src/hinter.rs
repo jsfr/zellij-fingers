@@ -108,7 +108,11 @@ impl Hinter {
     ) -> Vec<FormattedLine> {
         self.regenerate_hints();
 
-        let width = if render_width > 0 { render_width } else { self.width };
+        let width = if render_width > 0 {
+            render_width
+        } else {
+            self.width
+        };
         let lines = self.lines.clone();
         let mut result = Vec::new();
         for line in &lines {
@@ -272,11 +276,7 @@ fn count_matches(lines: &[String], pattern: &Regex) -> usize {
         .sum()
 }
 
-fn count_unique_matches(
-    lines: &[String],
-    pattern: &Regex,
-    match_group_indices: &[usize],
-) -> usize {
+fn count_unique_matches(lines: &[String], pattern: &Regex, match_group_indices: &[usize]) -> usize {
     let mut seen = std::collections::HashSet::new();
     for line in lines {
         for caps in pattern.captures_iter(line) {

@@ -8,9 +8,7 @@ pub struct PriorityQueue<T> {
 
 impl<T> PriorityQueue<T> {
     pub fn new() -> Self {
-        Self {
-            q: BTreeMap::new(),
-        }
+        Self { q: BTreeMap::new() }
     }
 
     pub fn push(&mut self, priority: i32, item: T) {
