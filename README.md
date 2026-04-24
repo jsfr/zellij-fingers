@@ -1,5 +1,9 @@
 # zellij-fingers
 
+[![CI](https://github.com/jsfr/zellij-fingers/actions/workflows/ci.yml/badge.svg)](https://github.com/jsfr/zellij-fingers/actions/workflows/ci.yml)
+[![Release](https://github.com/jsfr/zellij-fingers/actions/workflows/release.yml/badge.svg)](https://github.com/jsfr/zellij-fingers/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A [Zellij](https://zellij.dev/) WASM plugin that highlights pattern matches (URLs, file paths, git SHAs, IPs, etc.) in terminal panes and lets you select them via keyboard hints.
 
 This is a Rust rewrite of [tmux-fingers](https://github.com/Morantron/tmux-fingers) by [@Morantron](https://github.com/Morantron), adapted for the Zellij terminal multiplexer as a native WASM plugin.
@@ -14,6 +18,20 @@ This is a Rust rewrite of [tmux-fingers](https://github.com/Morantron/tmux-finge
 - Multiple keyboard layout support: QWERTY, AZERTY, QWERTZ, Dvorak, Colemak (full, homerow, left-hand, right-hand variants)
 
 ## Installation
+
+### Download a prebuilt release
+
+Grab `zellij-fingers.wasm` from the [latest release](https://github.com/jsfr/zellij-fingers/releases/latest) and drop it into your Zellij plugins directory:
+
+```bash
+mkdir -p ~/.config/zellij/plugins
+curl -L -o ~/.config/zellij/plugins/zellij-fingers.wasm \
+  https://github.com/jsfr/zellij-fingers/releases/latest/download/zellij-fingers.wasm
+```
+
+Each release also ships a `zellij-fingers.wasm.sha256` checksum for verification.
+
+### Build from source
 
 Requires Rust with the `wasm32-wasip1` target:
 
@@ -93,6 +111,20 @@ LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij-fingers.wasm" {
     // open_command "open"
 }
 ```
+
+## Development
+
+Common tasks are exposed as [just](https://just.systems/) recipes:
+
+```bash
+just test        # run tests on the host target
+just lint        # cargo clippy -D warnings
+just check-fmt   # verify formatting without modifying files
+just fmt         # apply rustfmt
+just install     # build release and copy wasm into ~/.config/zellij/plugins/
+```
+
+See [`CLAUDE.md`](CLAUDE.md) for an architecture overview, and [`CHANGELOG.md`](CHANGELOG.md) for release history.
 
 ## Credits
 
